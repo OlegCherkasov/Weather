@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { useCity } from '@/stores/city.js'
 
-const emit = defineEmits(['getCity'])
-
+const store = useCity()
 const nowCity = ref('')
 
 function sendNowCity() {
-  emit('getCity', nowCity.value)
+  store.city = nowCity.value
   nowCity.value = ''
 }
 </script>
