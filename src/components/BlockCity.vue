@@ -1,19 +1,23 @@
 <script setup>
-import { capitalizeFirstLetter } from '@/utils'
+import { useCity } from '@/stores/city.js'
+const store = useCity()
 
-const props = defineProps({
-  city: {
-    type: String,
-    required: true
-  }
-})
+// import { capitalizeFirstLetter } from '@/utils'
+
+// const props = defineProps({
+//   city: {
+//     type: String,
+//     required: true
+//   }
+// })
 const items = [ 'today', 'tomorrow']
 </script>
 
 <template>
   <div class="city">
     <p class="adress">adress</p>
-    <h2 class="city-now">{{ capitalizeFirstLetter(city) }}</h2>
+    <h2 class="city-now">{{ store.cityWithUpper }}</h2>
+    <!-- <h2 class="city-now">{{ capitalizeFirstLetter(city) }}</h2> -->
     <div class="period">
       <button class="period_time" v-for="(item, index) in items" :key="index">
         {{ item }}

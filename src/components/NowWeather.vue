@@ -45,7 +45,7 @@ onMounted(() => {
     <h2 class="now-title">NOW</h2>
     <p>{{capitalizeFirstLetter(date)}}</p>
     <p>{{time}}</p>
-    <h1 class="temp">{{ weatherNow?.main.temp }}<span class="temp-c">&#8451;</span></h1>
+    <h1 class="temp">{{ weatherNow?.main.temp.toFixed(1) }}<span class="temp-c">&#8451;</span></h1>
     <p>Feels like: {{ weatherNow?.main.feels_like.toFixed(1) }} &#8451;</p>
     <p>{{capitalizeFirstLetter(weatherNow?.weather[0].description)}}</p>
     

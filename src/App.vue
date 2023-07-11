@@ -32,8 +32,8 @@ watch(
 
 <template>
   <div class="container">
-    <HeaderInput  />
-    <BlockCity :city="store.city" />
+    <HeaderInput />
+    <BlockCity />
     <div class="weather">
       <NowWeather :weatherNow="weatherNow" />
       <TodayWeather />
