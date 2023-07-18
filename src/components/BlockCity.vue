@@ -1,6 +1,9 @@
 <script setup>
 import { useCity } from '@/stores/city.js'
-const store = useCity()
+const storeCity = useCity()
+
+import { weather } from '@/stores/weather.js'
+const storeWeather = weather()
 
 // import { capitalizeFirstLetter } from '@/utils'
 
@@ -16,7 +19,7 @@ const items = [ 'today', 'tomorrow']
 <template>
   <div class="city">
     <p class="adress">adress</p>
-    <h2 class="city-now">{{ store.cityWithUpper }}</h2>
+    <h2 class="city-now">{{ storeCity.cityWithUpper }}, {{ storeWeather.weatherNow?.sys?.country }}</h2>
     <!-- <h2 class="city-now">{{ capitalizeFirstLetter(city) }}</h2> -->
     <div class="period">
       <button class="period_time" v-for="(item, index) in items" :key="index">
@@ -30,7 +33,7 @@ const items = [ 'today', 'tomorrow']
 @import '@/assets/styles/main'
 
 .city
-  height: 120px
+  height: 118px
   margin-top: 20px
   padding: 15px
   color: $white
