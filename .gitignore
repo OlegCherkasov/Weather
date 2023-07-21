@@ -1,4 +1,10 @@
 src/constants/index.js
+
+# local env files
+.env
+.env.local
+.env.*.local
+
 # Logs
 logs
 *.log

@@ -5,27 +5,34 @@ const storeCity = useCity()
 import { weather } from '@/stores/weather.js'
 const storeWeather = weather()
 
-// import { capitalizeFirstLetter } from '@/utils'
-
 // const props = defineProps({
 //   city: {
 //     type: String,
 //     required: true
 //   }
 // })
-const items = [ 'today', 'tomorrow']
+
 </script>
 
 <template>
   <div class="city">
-    <p class="adress">adress</p>
-    <h2 class="city-now">{{ storeCity.cityWithUpper }}, {{ storeWeather.weatherNow?.sys?.country }}</h2>
-    <!-- <h2 class="city-now">{{ capitalizeFirstLetter(city) }}</h2> -->
-    <div class="period">
-      <button class="period_time" v-for="(item, index) in items" :key="index">
-        {{ item }}
-      </button>
+    <div class="adress">
+      <p>latitude: {{ storeWeather.weatherNow?.coord?.lat.toFixed(2) }} /</p>
+      <p>longitude: {{ storeWeather.weatherNow?.coord?.lon.toFixed(2) }}</p>
     </div>
+    <h2 v-if="storeWeather.weatherNow?.sys?.country"
+      class="city-now">
+      {{ storeWeather.weatherNow?.name }} ,
+      {{ storeWeather.weatherNow?.sys?.country }}
+    </h2>
+    <h2 v-else
+      class="city-now">
+      {{ storeCity.cityWithUpper }} : city not found
+    </h2>
+      <nav class="period">
+        <RouterLink class="period_time" to="/">Today</RouterLink>
+        <RouterLink class="period_time" to="/tomorrow">Tomorrow</RouterLink>
+      </nav>
   </div>
 </template>
 
@@ -33,19 +40,27 @@ const items = [ 'today', 'tomorrow']
 @import '@/assets/styles/main'
 
 .city
-  height: 118px
   margin-top: 20px
-  padding: 15px
+  padding: 10px 20px 10px 20px
   color: $white
   border: 2px solid white
   border-radius: 14px
   background-image: url('@/assets/img/sky_block.jpg')
   background-position: center
   background-size: cover
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  gap: 10px
 
   .adress
     font-size: 22px
-    padding-left: 20px
+    display: flex
+    flex-wrap: wrap
+    align-self: flex-start
+    gap: 7px
+
 
   .city-now
     font-size: 32px
@@ -53,16 +68,13 @@ const items = [ 'today', 'tomorrow']
     text-align: center  
 
   .period
-    margin-top: 12px
-    padding-right: 40px
     display: flex
-    justify-content: flex-end
-    gap: 50px
+    align-self: end
+    gap: 30px
 
     .period_time
-      font-size: 20px
+      font-size: 24px
+      font-weight: 700
       color: $white
-      border: none
-      background-color: transparent
-      cursor: pointer
+      text-decoration: none
 </style>

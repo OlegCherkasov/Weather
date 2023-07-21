@@ -1,14 +1,31 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useCity } from '@/stores/city.js'
+import { capitalizeFirstLetter } from '@/utils'
 
-const store = useCity()
+
+const storeCity = useCity()
 const nowCity = ref('')
 
 function sendNowCity() {
-  store.city = nowCity.value
+  storeCity.city = nowCity.value
   nowCity.value = ''
 }
+
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',}
+    
+// let date = computed(() => {
+//   return new Date().toLocaleString( 'uk-UA', options )
+// }) 
+
+const date = ref('')
+
+onMounted(() => {
+  setInterval(() => {
+    date.value = new Date().toLocaleString( 'uk-UA', options )
+  }, 1000)
+})
+
 </script>
 
 <template>
@@ -29,7 +46,8 @@ function sendNowCity() {
             />
         </div>
       </div>
-      <button class="but">Eng</button>
+      <h3>{{capitalizeFirstLetter(date)}}</h3>
+      <!-- <button class="but">Eng</button> -->
     </div>
 </template>
 
@@ -44,7 +62,11 @@ function sendNowCity() {
   border-radius: 14px
   background: $background-block
   flex-direction: row
-  justify-content: space-between
+  flex-wrap: wrap
+  justify-content: space-evenly
+  align-items: center
+  gap: 10px
+  text-align: center
 
   .title_input
     max-width: 367px

@@ -1,43 +1,56 @@
 <script setup>
-import { ref, onMounted, computed }  from 'vue'
+import { ref, onMounted, computed, watch }  from 'vue'
 import { capitalizeFirstLetter } from '@/utils'
 
+import { useCity } from '@/stores/city.js'
+  const storeCity = useCity()
+
 import { weather } from '@/stores/weather.js'
-const storeWeather = weather()
-
+  const storeWeather = weather()
+    
 // const props = defineProps({
-//   weatherNow: {
-//     type: [ Object, null],
-//     required: true,
-//     default: () => {}
-//   }
-// })
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-
-let date = computed(() => {
-  return new Date().toLocaleString('uk-UA', options )
-}) 
+  //   weatherNow: {
+    //     type: [ Object, null],
+    //     required: true,
+    //     default: () => {}
+    //   }
+    // })
 
 let direction = (val) => {
-      if ( 45 >= val || val >= 315 ) { 
-      return "Nordic" 
-    } else  if ( 45 < val && val < 135 ) {
-      return "East"
-    } else  if ( 135 <= val && val <= 225 ) {
-      return "South"
-    } else  if ( 225 < val && val < 315 ) {
-      return "West"
-    } else 
-      return "Calm"
+  if ( 45 >= val || val >= 315 ) { 
+    return "Nordic" 
+  } else  if ( 45 < val && val < 135 ) {
+    return "East"
+  } else  if ( 135 <= val && val <= 225 ) {
+    return "South"
+  } else  if ( 225 < val && val < 315 ) {
+    return "West"
+  } else 
+  return "Calm"
 }
-
-const time = ref('')
+    
+const time2 = ref('')
+const time4 = ref('')
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric',}
 
 onMounted(() => {
   setInterval(() => {
-    time.value = new Date().toLocaleTimeString()
+    time2.value = new Date().getTimezoneOffset()*60*1000
+    time4.value = new Date(Date.now() + (storeWeather.weatherNow?.timezone * 1000) + time2.value).toLocaleString( 'en-GB', options )
+
   }, 1000)
 })
+
+watch( 
+  storeCity,
+    () => {
+      storeWeather.getWeather(storeCity.city)
+    },
+    {
+    immediate: true,
+    deep: true
+    }
+)
 
 </script>
 
@@ -47,11 +60,15 @@ onMounted(() => {
       <h3>{{ storeWeather.weatherNow?.name }}</h3>
       <h2>NOW</h2>
     </div>
-    <p>{{capitalizeFirstLetter(date)}}</p>
-    <p>{{time}}</p>
+
+
+    <!-- <p>GMT0 {{time}}</p> -->
+    <!-- <p>{{time2}}</p> -->
+    <p>{{time4}}</p>
+
     <h1 class="temp">{{ storeWeather.weatherNow?.main?.temp.toFixed(1) }}<span class="temp-c">&#8451;</span></h1>
     <p>Feels like: {{ storeWeather.weatherNow?.main?.feels_like.toFixed(1) }} &#8451;</p>
-    <p>{{capitalizeFirstLetter(storeWeather.weatherNow?.weather[0]?.description)}}</p>
+    <p>{{capitalizeFirstLetter(storeWeather.weatherNow?.weather[0].description)}}</p>
     
     <div class="fact">
       <div class="data">
@@ -89,19 +106,16 @@ onMounted(() => {
   font-size: 26px
   display: flex
   flex-direction: column
-  justify-content: space-between
-  align-items: center
   gap: 32px
+  text-align: center
 
   .now-title
     margin-top: 20px
-    margin-right: 5%
     color: $white
     align-self: flex-end
     display: flex
     align-items: baseline
     gap: 20px
-
 
   .temp
     font-size: 80px
